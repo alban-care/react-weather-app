@@ -1,8 +1,13 @@
+import NavBar from "./NavBar";
+
 function App() {
   return (
-    <main>
-      <h1>Hello, world!</h1>
-    </main>
+    <>
+      <NavBar />
+      <main>
+        <h1>Hello, world!</h1>
+      </main>
+    </>
   );
 }
 
