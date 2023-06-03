@@ -1,15 +1,16 @@
+import {
+  AppBar,
+  Container,
+  IconButton,
+  InputBase,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import { alpha, styled } from "@mui/material/styles";
 import React from "react";
-import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-// import MenuIcon from "@mui/icons-material/Menu";
-import MenuIcon from "./MenuIcon.tsx";
-// import SearchIcon from "@mui/icons-material/Search";
 import SearchIcon from "./SearchIcon.tsx";
+import GeoAltFill from "../Icons/GeoAltFill.tsx";
+import LogoUmbrella from "../Icons/LogoUmbrella.tsx";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -59,25 +60,17 @@ type NavBarProps = {
 
 const NavBar: React.FC<NavBarProps> = () => {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <AppBar position="static">
+      <Container maxWidth="lg">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+          <LogoUmbrella color="white" size="24" />
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" }, ml: 2 }}
           >
-            MUI
+            React Weather App
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -88,9 +81,13 @@ const NavBar: React.FC<NavBarProps> = () => {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
+          <IconButton size="large" edge="start" color="inherit" sx={{ ml: 2 }}>
+            {/* <MenuIcon /> */}
+            <GeoAltFill color="white" size="24" />
+          </IconButton>
         </Toolbar>
-      </AppBar>
-    </Box>
+      </Container>
+    </AppBar>
   );
 };
 

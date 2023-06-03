@@ -1,16 +1,17 @@
 import React from "react";
 
 type SearchIconProps = {
-  // todo
+  color?: string;
+  size?: string;
 };
 
-const SearchIcon: React.FC<SearchIconProps> = () => {
+const SearchIcon: React.FC<SearchIconProps> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
+      width={props.size ? props.size : "16"}
+      height={props.size ? props.size : "16"}
+      fill={props.color ? props.color : "currentColor"}
       viewBox="0 0 16 16"
     >
       <path
