@@ -12,13 +12,13 @@ const SmallerCard: React.FC<SmallerCardProps> = ({ title, icon, value }) => {
     <Card>
       <CardContent>
         <Box display="flex" flexDirection="column" alignItems={"center"}>
-          <Typography variant="h6" mb={2}>
+          <Typography variant="subtitle2" mb={2}>
             {title}
           </Typography>
-          <Box display="flex" alignItems={"center"} p={1} color="inherit">
+          <Typography display="flex" alignItems={"center"} p={1} color="red">
             {icon}
-          </Box>
-          <Typography variant="h4" mt={2}>
+          </Typography>
+          <Typography variant="body2" mt={2} fontWeight="bolder">
             {value}
           </Typography>
         </Box>

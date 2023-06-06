@@ -6,21 +6,23 @@ import Wrapper from "./Wrapper";
 import CardWrapper from "./CardWrapper";
 import SmallerCard from "./SmallerCard";
 import Moisture from "./Icons/Moisture";
-import ThermometerSun from "./Icons/ThermometerSun";
+import ThermometerIcon from "./Icons/ThermometerIcon";
+import ForecastCard from "./ForecastCard";
+import TodayCard from "./TodayCard";
 
 function App() {
   const humidity = {
     title: "Humidity",
-    icon: <Moisture size="2rem" />,
+    icon: <Moisture fontSize="medium" color="primary" />,
     value: "50",
-    Symbol: "%",
+    symbol: "%",
   };
 
   const feelsLike = {
     title: "Feels Like",
-    icon: <ThermometerSun size="2rem" />,
+    icon: <ThermometerIcon fontSize="medium" color="primary" />,
     value: "30",
-    Symbol: "°C",
+    symbol: "°C",
   };
 
   return (
@@ -35,31 +37,37 @@ function App() {
       <NavBar />
       <Box component="main" p={2} flexGrow={1}>
         <Wrapper>
-          <CardWrapper xs={4}>
-            <Typography color="text.secondary">Now</Typography>
+          <CardWrapper xs={12} sm={6} lg={3} maxWidth="360px">
+            <Typography color="text.secondary" mb={3}>
+              Now
+            </Typography>
             <NowCard />
             <Grid container spacing={2} my={1}>
               <CardWrapper xs={6}>
                 <SmallerCard
                   title={humidity.title}
                   icon={humidity.icon}
-                  value={`${humidity.value}${humidity.Symbol}`}
+                  value={`${humidity.value}${humidity.symbol}`}
                 />
               </CardWrapper>
               <CardWrapper xs={6}>
                 <SmallerCard
                   title={feelsLike.title}
                   icon={feelsLike.icon}
-                  value={`${feelsLike.value}${feelsLike.Symbol}`}
+                  value={`${feelsLike.value}${feelsLike.symbol}`}
                 />
               </CardWrapper>
             </Grid>
           </CardWrapper>
-          <CardWrapper xs={4}>
-            <NowCard />
+          <CardWrapper xs={12} sm={6}>
+            <Typography color="text.secondary">Today</Typography>
+            <TodayCard />
           </CardWrapper>
-          <CardWrapper xs={4}>
-            <NowCard />
+          <CardWrapper xs={12} lg={3} maxWidth="360px">
+            <Typography color="text.secondary" mb={3}>
+              Forecast
+            </Typography>
+            <ForecastCard />
           </CardWrapper>
         </Wrapper>
       </Box>
