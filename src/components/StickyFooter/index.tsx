@@ -14,8 +14,6 @@ const StickyFooter: React.FC<StickyFooterProps> = () => {
         py: 2,
         mt: "auto",
         textAlign: "center",
-        backgroundColor: "primary.main",
-        color: "primary.contrastText",
       }}
     >
       <Copyright />

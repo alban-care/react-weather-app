@@ -1,8 +1,5 @@
-import { createTheme } from '@mui/material/styles';
-
-
-const theme = createTheme({
-    palette: {},
-});
+const theme = {
+  palette: {},
+};
 
 export default theme;

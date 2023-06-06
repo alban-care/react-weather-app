@@ -8,9 +8,10 @@ import {
 } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 import React from "react";
-import SearchIcon from "./SearchIcon.tsx";
+import ColorModeButton from "../ColorModeButton.tsx";
 import GeoAltFill from "../Icons/GeoAltFill.tsx";
 import LogoUmbrella from "../Icons/LogoUmbrella.tsx";
+import SearchIcon from "./SearchIcon.tsx";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -82,9 +83,20 @@ const NavBar: React.FC<NavBarProps> = () => {
             />
           </Search>
           <IconButton size="large" edge="start" color="inherit" sx={{ ml: 2 }}>
-            {/* <MenuIcon /> */}
             <GeoAltFill color="white" size="24" />
           </IconButton>
+          <ColorModeButton />
+          {/* <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
+            {colorMode === "dark" ? (
+              <Typography variant="h6" noWrap component="div">
+                Dark Mode
+              </Typography>
+            ) : (
+              <Typography variant="h6" noWrap component="div">
+                Light Mode
+              </Typography>
+            )}
+          </IconButton> */}
         </Toolbar>
       </Container>
     </AppBar>
