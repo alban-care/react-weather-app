@@ -1,7 +1,7 @@
 import { FormControlLabel, FormGroup, Switch, styled } from "@mui/material";
 import React from "react";
 import { useRecoilState } from "recoil";
-import { colorModeState } from "../../store/colorModeAtoms";
+import { colorModeState } from "../../state/colorMode";
 
 type ColorModeButtonProps = {
   // todo

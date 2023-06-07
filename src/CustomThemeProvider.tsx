@@ -6,7 +6,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useRecoilState } from "recoil";
-import { colorModeState } from "./store/colorModeAtoms";
+import { colorModeState } from "./state/colorMode.ts";
 import theme from "./theme.ts";
 
 type CustomThemeProviderProps = {
