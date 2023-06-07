@@ -1,7 +1,7 @@
 import { FormControlLabel, FormGroup, Switch, styled } from "@mui/material";
 import React from "react";
 import { useRecoilState } from "recoil";
-import { colorModeState } from "../store/colorModeAtoms";
+import { colorModeState } from "../../store/colorModeAtoms";
 
 type ColorModeButtonProps = {
   // todo
@@ -30,7 +30,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     },
   },
   "& .MuiSwitch-thumb": {
-    backgroundColor: theme.palette.mode === "dark" ? "#001e3c" : "#6f819d",
+    backgroundColor: "#6f819d",
     width: 32,
     height: 32,
     "&:before": {
@@ -62,7 +62,7 @@ const ColorModeButton: React.FC<ColorModeButtonProps> = () => {
   return (
     <FormGroup>
       <FormControlLabel
-        control={<MaterialUISwitch sx={{ m: 1 }} />}
+        control={<MaterialUISwitch />}
         defaultChecked={colorMode === "dark"}
         label=""
         onChange={toggleColorMode}
