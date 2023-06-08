@@ -20,6 +20,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { cityState, citiesState } from "../../state/city";
 import { searchState } from "../../state/search";
 import { getGeoLocationByCityName } from "../../api";
+import { getGeoLocationByCoordinate } from "../../api";
 
 type SearchBarProps = {
   // props
@@ -82,7 +83,7 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!search) return [];
-    // todo: fetch data from api
+    // fetch data from api
     const cities = await getGeoLocationByCityName(search);
     // update cities state
     setCities(cities);
@@ -98,6 +99,28 @@ const SearchBar: React.FC<SearchBarProps> = () => {
     setAnchorEl(null);
     // reset search state
     setSearch("");
+  };
+
+  const handleClickOnGeoIcon = async () => {
+    type Position = {
+      coords: {
+        latitude: number;
+        longitude: number;
+      };
+    };
+    // get user's current location
+    const position = await new Promise<Position>((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+    // fetch data from api
+    const cities = await getGeoLocationByCoordinate(
+      position.coords.latitude,
+      position.coords.longitude
+    );
+    // update city state
+    setCityState(cities[0]);
+    // open the menu
+    setAnchorEl(inputRef.current);
   };
 
   useEffect(() => {
@@ -132,7 +155,12 @@ const SearchBar: React.FC<SearchBarProps> = () => {
                 value={search}
               />
             </Search>
-            <IconButton size="large" edge="start" sx={{ ml: 2 }}>
+            <IconButton
+              size="large"
+              edge="start"
+              sx={{ ml: 2 }}
+              onClick={handleClickOnGeoIcon}
+            >
               <GeoIcon />
             </IconButton>
           </Box>

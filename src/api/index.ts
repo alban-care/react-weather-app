@@ -84,7 +84,7 @@ export const getGeoLocationByCoordinate = async (
   lat: number,
   lon: number,
   limit = 5
-): Promise<GeoLocationReverse> => {
+): Promise<GeoLocationReverse[]> => {
   const url = `${CITY_BASE_URL}/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${API_KEY}`;
   const res = await fetch(url);
   if (res) console.log("fetch geo location by coordinate");
