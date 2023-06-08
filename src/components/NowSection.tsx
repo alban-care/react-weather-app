@@ -26,13 +26,12 @@ const NowSection: React.FC<NowSectionProps> = () => {
   const getWeather = useRecoilValue(weatherState);
   const getCity = useRecoilValue(cityState);
 
-  const { dt, main, weather, sys } = getWeather;
+  const { dt, main, weather } = getWeather;
   const { humidity, feels_like, temp } = main;
   const { description, icon } = weather[0];
 
   if (!getWeather || !getCity) return <div>loading...</div>;
 
-  console.log(dt, main, weather, sys);
   return (
     <Grid item xs={12} component="section">
       <Typography color="text.secondary">Now</Typography>

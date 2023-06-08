@@ -131,15 +131,15 @@ type GeoLocationReverse = {
 };
 
 type DateOptions = {
-  weekday: "long";
-  year: "numeric";
-  month: "long";
-  day: "numeric";
-  timeZone: "UTC";
+  weekday: "long" | "short" | "narrow" | undefined;
+  year: "numeric" | "2-digit" | undefined;
+  month: "long" | "short" | "narrow" | undefined;
+  day: "numeric" | "2-digit" | undefined;
+  timeZone: string | undefined;
 };
 
 type TimeOptions = {
-  timeZone: "UTC";
-  hour: "numeric";
-  minute: "numeric";
+  timeZone: string | undefined;
+  hour: "numeric" | "2-digit" | undefined;
+  minute: "numeric" | "2-digit" | undefined;
 };

@@ -22,10 +22,10 @@ const App: React.FC<AppProps> = () => {
   useEffect(() => {
     if (getCityState) {
       const { lat, lon } = getCityState;
-      getWeatherByCoordinate(lat, lon).then((data) => {
+      getWeatherByCoordinate(lat, lon, "metric", "fr").then((data) => {
         setWeather(data);
       });
-      getForecastByCoordinate(lat, lon).then((data) => {
+      getForecastByCoordinate(lat, lon, "metric", "fr").then((data) => {
         setForecast(data);
       });
     }

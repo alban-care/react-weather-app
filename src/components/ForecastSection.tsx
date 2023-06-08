@@ -1,49 +1,21 @@
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import React from "react";
 import WeatherIcon from "./WeatherIcon";
+import { useRecoilValue } from "recoil";
+import { forecastState } from "../state/weather";
+import { convertTemperatureBasedOnUnits, getDateByLocale } from "../utils";
 
 type ForecastSectionProps = {
   // todo
 };
 
 const ForecastSection: React.FC<ForecastSectionProps> = () => {
-  const data = [
-    {
-      day: "Thursday",
-      date: "2",
-      month: "June",
-      icon: "01d",
-      temp: "20°C",
-    },
-    {
-      day: "Friday",
-      date: "3",
-      month: "June",
-      icon: "03d",
-      temp: "24°C",
-    },
-    {
-      day: "Saturday",
-      date: "4",
-      month: "June",
-      icon: "09d",
-      temp: "18°C",
-    },
-    {
-      day: "Sunday",
-      date: "5",
-      month: "June",
-      icon: "13d",
-      temp: "12°C",
-    },
-    {
-      day: "Monday",
-      date: "6",
-      month: "June",
-      icon: "11d",
-      temp: "16°C",
-    },
-  ];
+  const getForecast = useRecoilValue<Forecast>(forecastState);
+  const { list } = getForecast;
+
+  const data = list.filter(
+    (item, index) => index % 8 === 0 && Object.keys(item).length !== 0
+  );
 
   return (
     <Grid item xs={12} component="section">
@@ -66,14 +38,28 @@ const ForecastSection: React.FC<ForecastSectionProps> = () => {
                     mb={1}
                     mr={{ xs: 4, sm: 0 }}
                   >
-                    <Typography variant="subtitle1">{item.day}</Typography>
                     <Typography variant="subtitle1">
-                      {`${item.date} ${item.month}`}
+                      {getDateByLocale(item.dt, "fr-FR", {
+                        weekday: "long",
+                        year: undefined,
+                        month: undefined,
+                        day: undefined,
+                        timeZone: "UTC",
+                      })}
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {getDateByLocale(item.dt, "fr-FR", {
+                        weekday: undefined,
+                        year: undefined,
+                        month: "long",
+                        day: "numeric",
+                        timeZone: "UTC",
+                      })}
                     </Typography>
                   </Box>
-                  <WeatherIcon icon={item.icon} />
+                  <WeatherIcon icon={item.weather[0].icon} />
                   <Typography variant="h6" mt={1} ml={{ xs: 4, sm: 0 }}>
-                    {item.temp}
+                    {convertTemperatureBasedOnUnits(item.main.temp, "metric")}
                   </Typography>
                 </Box>
               </Grid>
