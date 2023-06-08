@@ -46,7 +46,7 @@ const NowSection: React.FC<NowSectionProps> = () => {
                   alignItems="center"
                   mb={2}
                 >
-                  <WeatherIcon icon={icon} />
+                  <WeatherIcon icon={icon} width={128} />
                   <Typography variant="h6" mt={2}>
                     {description}
                   </Typography>
@@ -92,18 +92,13 @@ const NowSection: React.FC<NowSectionProps> = () => {
                   flexDirection="column"
                   alignItems={"center"}
                 >
-                  <Typography variant="subtitle2" mb={2}>
+                  <Typography variant="h6" mb={2}>
                     Humidity
                   </Typography>
-                  <Typography
-                    display="flex"
-                    alignItems={"center"}
-                    p={1}
-                    color={blue[300]}
-                  >
-                    <MoistureIcon />
+                  <Typography display="flex" alignItems={"center"} p={1}>
+                    <MoistureIcon sx={{ fontSize: 40, color: blue[300] }} />
                   </Typography>
-                  <Typography variant="body2" mt={2} fontWeight="bolder">
+                  <Typography variant="h6" mt={2} fontWeight="bolder">
                     {`${humidity}%`}
                   </Typography>
                 </Box>
@@ -116,13 +111,13 @@ const NowSection: React.FC<NowSectionProps> = () => {
                   flexDirection="column"
                   alignItems={"center"}
                 >
-                  <Typography variant="subtitle2" mb={2}>
+                  <Typography variant="h6" mb={2}>
                     Feels Like
                   </Typography>
                   <Typography display="flex" alignItems={"center"} p={1}>
-                    <ThermometerIcon />
+                    <ThermometerIcon sx={{ fontSize: 40 }} />
                   </Typography>
-                  <Typography variant="body2" mt={2} fontWeight="bolder">
+                  <Typography variant="h6" mt={2} fontWeight="bolder">
                     {convertTemperatureBasedOnUnits(feels_like, "metric")}
                   </Typography>
                 </Box>

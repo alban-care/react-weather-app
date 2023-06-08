@@ -9,10 +9,12 @@ type WeatherIconProps = {
 
 const WeatherIcon: React.FC<WeatherIconProps> = ({
   icon,
-  width = 56,
-  height = 56,
+  width = 54,
+  height,
 }) => {
   const url = `../public/assets/images/${icon}.png`;
+
+  if (height === undefined) height = width;
 
   if (!url)
     return (

@@ -28,11 +28,11 @@ const TodaySection: React.FC<TodaySectionProps> = () => {
                   flexDirection="column"
                   alignItems={"center"}
                 >
-                  <Typography variant="subtitle2">
+                  <Typography variant="h6" mb={1}>
                     {getTimeByLocale(item.dt, "fr-FR")}
                   </Typography>
                   <WeatherIcon icon={item.weather[0].icon} />
-                  <Typography variant="body2" fontWeight="bolder">
+                  <Typography variant="h6" fontWeight="bolder" mt={1}>
                     {convertTemperatureBasedOnUnits(item.main.temp, "metric")}
                   </Typography>
                 </Box>
