@@ -67,7 +67,7 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   const theme = useTheme();
   const inputRef = useRef<HTMLInputElement>(null);
   const { palette } = theme;
-
+  const [error, setError] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useRecoilState<string>(searchState);
   const [cities, setCities] = useRecoilState<GeoLocation[]>(citiesState);
@@ -108,18 +108,45 @@ const SearchBar: React.FC<SearchBarProps> = () => {
         longitude: number;
       };
     };
-    // get user's current location
-    const position = await new Promise<Position>((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject);
-    });
-    // fetch data from api
-    const cities = await getGeoLocationByCoordinate(
-      position.coords.latitude,
-      position.coords.longitude
-    );
-    // update city state
-    setCityState(cities[0]);
-    // open the menu
+
+    try {
+      // get user's current location
+      const position = await new Promise<Position>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0,
+        });
+      });
+
+      // fetch data from api
+      const cities = await getGeoLocationByCoordinate(
+        position.coords.latitude,
+        position.coords.longitude
+      );
+      // update cities state
+      setCities(cities);
+      // update city state
+      // setCityState(cities[0]);
+      // open the menu
+    } catch (error) {
+      if (error instanceof GeolocationPositionError) {
+        if (error.code === error.PERMISSION_DENIED) {
+          setError(
+            "La géolocalisation n'est pas autorisée pour votre navigateur. Veuillez l'activer."
+          );
+        } else {
+          setError(
+            "Une erreur de géolocalisation est survenue. Veuillez réessayer ultérieurement."
+          );
+        }
+      } else {
+        setError(
+          "Une erreur inattendue est survenue. Veuillez réessayer ultérieurement."
+        );
+      }
+    }
+
     setAnchorEl(inputRef.current);
   };
 
@@ -197,6 +224,12 @@ const SearchBar: React.FC<SearchBarProps> = () => {
               },
             }}
           >
+            {error && (
+              <Box sx={{ p: 2, pb: 0.5 }}>
+                <Typography color="text.secondary">{error}</Typography>
+              </Box>
+            )}
+
             {cities && (
               <Box sx={{ p: 2, pb: 0.5 }}>
                 {cities.map((result, index) => (

@@ -33,7 +33,8 @@ const NavBar: React.FC<NavBarProps> = () => {
                 variant="h6"
                 noWrap
                 component="div"
-                sx={{ display: { xs: "none", sm: "block" }, mr: 2 }}
+                sx={{ display: { xs: "block", sm: "block" }, mr: 2 }}
+                fontSize={{ xs: 14, sm: 18 }}
               >
                 React Weather App
               </Typography>
