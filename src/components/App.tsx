@@ -5,10 +5,10 @@ import NowSection from "./NowSection";
 import StickyFooter from "./StickyFooter";
 import TodaySection from "./TodaySection";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { weatherState } from "../state/weather";
+import { weatherState, forecastState } from "../state/weather";
 import { cityState } from "../state/city";
 import { useEffect } from "react";
-import { getWeatherByCoordinate } from "../api";
+import { getForecastByCoordinate, getWeatherByCoordinate } from "../api";
 
 type AppProps = {
   // props
@@ -16,6 +16,7 @@ type AppProps = {
 
 const App: React.FC<AppProps> = () => {
   const [weather, setWeather] = useRecoilState(weatherState);
+  const [forecast, setForecast] = useRecoilState(forecastState);
   const getCityState = useRecoilValue(cityState);
 
   useEffect(() => {
@@ -24,8 +25,11 @@ const App: React.FC<AppProps> = () => {
       getWeatherByCoordinate(lat, lon).then((data) => {
         setWeather(data);
       });
+      getForecastByCoordinate(lat, lon).then((data) => {
+        setForecast(data);
+      });
     }
-  }, [getCityState, setWeather]);
+  }, [getCityState, setWeather, setForecast]);
 
   return (
     <Box
@@ -40,7 +44,7 @@ const App: React.FC<AppProps> = () => {
       <Box component="main" p={2} flexGrow={1}>
         <Container maxWidth="md">
           <Grid container spacing={2}>
-            {weather ? (
+            {weather && forecast ? (
               <>
                 <NowSection />
                 <TodaySection />
