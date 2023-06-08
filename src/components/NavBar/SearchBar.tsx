@@ -70,7 +70,7 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useRecoilState<string>(searchState);
   const [cities, setCities] = useRecoilState<GeoLocation[]>(citiesState);
-  const setCityState = useSetRecoilState<GeoLocation>(cityState);
+  const setCityState = useSetRecoilState<GeoLocation | null>(cityState);
 
   const debouncedValue = useDebounce<string>(search, 500);
 

@@ -7,32 +7,32 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import Icon from "../assets/images/01d.png";
 import CalendarIcon from "./Icons/CalendarIcon";
 import GeoAltFill from "./Icons/GeoIcon";
 import MoistureIcon from "./Icons/MoistureIcon";
 import ThermometerIcon from "./Icons/ThermometerIcon";
 import { blue } from "@mui/material/colors";
+import { useRecoilValue } from "recoil";
+import { weatherState } from "../state/weather";
+import { convertTemperatureBasedOnUnits, getDateByLocale } from "../utils";
+import { cityState } from "../state/city";
+import WeatherIcon from "./WeatherIcon";
 
 type NowSectionProps = {
   // todo
 };
 
 const NowSection: React.FC<NowSectionProps> = () => {
-  const humidity = {
-    title: "Humidity",
-    icon: <MoistureIcon />,
-    value: "50",
-    symbol: "%",
-  };
+  const getWeather = useRecoilValue(weatherState);
+  const getCity = useRecoilValue(cityState);
 
-  const feelsLike = {
-    title: "Feels Like",
-    icon: <ThermometerIcon />,
-    value: "30",
-    symbol: "°C",
-  };
+  const { dt, main, weather, sys } = getWeather;
+  const { humidity, feels_like, temp } = main;
+  const { description, icon } = weather[0];
 
+  if (!getWeather || !getCity) return <div>loading...</div>;
+
+  console.log(dt, main, weather, sys);
   return (
     <Grid item xs={12} component="section">
       <Typography color="text.secondary">Now</Typography>
@@ -47,12 +47,12 @@ const NowSection: React.FC<NowSectionProps> = () => {
                   alignItems="center"
                   mb={2}
                 >
-                  <img src={Icon} alt="weather icon" width={56} height={56} />
+                  <WeatherIcon icon={icon} />
                   <Typography variant="h6" mt={2}>
-                    Sunny
+                    {description}
                   </Typography>
                   <Typography variant="h4" mt={2}>
-                    20°C
+                    {convertTemperatureBasedOnUnits(temp, "metric")}
                   </Typography>
                 </Box>
                 <Divider />
@@ -65,13 +65,13 @@ const NowSection: React.FC<NowSectionProps> = () => {
                   <Box display="flex" alignItems="center">
                     <CalendarIcon />
                     <Typography variant="h6" m={1}>
-                      Thursday 2, June
+                      {getDateByLocale(dt, "fr-FR")}
                     </Typography>
                   </Box>
                   <Box display="flex" alignItems="center">
                     <GeoAltFill />
                     <Typography variant="h6" m={1}>
-                      Austin, TX
+                      {`${getCity.name}, ${getCity.state}, ${getCity.country}`}
                     </Typography>
                   </Box>
                 </Box>
@@ -94,7 +94,7 @@ const NowSection: React.FC<NowSectionProps> = () => {
                   alignItems={"center"}
                 >
                   <Typography variant="subtitle2" mb={2}>
-                    {humidity.title}
+                    Humidity
                   </Typography>
                   <Typography
                     display="flex"
@@ -102,10 +102,10 @@ const NowSection: React.FC<NowSectionProps> = () => {
                     p={1}
                     color={blue[300]}
                   >
-                    {humidity.icon}
+                    <MoistureIcon />
                   </Typography>
                   <Typography variant="body2" mt={2} fontWeight="bolder">
-                    {`${humidity.value}${humidity.symbol}`}
+                    {`${humidity}%`}
                   </Typography>
                 </Box>
               </CardContent>
@@ -118,13 +118,13 @@ const NowSection: React.FC<NowSectionProps> = () => {
                   alignItems={"center"}
                 >
                   <Typography variant="subtitle2" mb={2}>
-                    {feelsLike.title}
+                    Feels Like
                   </Typography>
                   <Typography display="flex" alignItems={"center"} p={1}>
-                    {feelsLike.icon}
+                    <ThermometerIcon />
                   </Typography>
                   <Typography variant="body2" mt={2} fontWeight="bolder">
-                    {`${feelsLike.value}${feelsLike.symbol}`}
+                    {convertTemperatureBasedOnUnits(feels_like, "metric")}
                   </Typography>
                 </Box>
               </CardContent>

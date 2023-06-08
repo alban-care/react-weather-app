@@ -64,6 +64,29 @@ export const metersPerSecondToKilometersPerHour = (mps: number): number => {
   return mps * 3.6;
 };
 
+/**
+ * @name convertTemperatureBasedOnUnits
+ * @description Converts the temperature based on the specified units.
+ * @param {number} temp - The temperature (e.g., 10).
+ * @param {string} units - The units (e.g., "standart", "metric", "imperial").
+ * @returns {string} The formatted temperature based on the specified units.
+ */
+export const convertTemperatureBasedOnUnits = (
+  temp: number,
+  units = "metric"
+) => {
+  if (units === "standard") {
+    const kelvin = Math.floor((temp * 9) / 5 - 459.67);
+    return `${kelvin} K`;
+  }
+  if (units === "imperial") {
+    const fahrenheit = Math.floor((temp * 9) / 5 + 32);
+    return `${fahrenheit} °F`;
+  }
+  const celsius = Math.floor(temp);
+  return `${celsius} °C`;
+};
+
 export const airQualityIndexToText = {
   en: {
     1: {

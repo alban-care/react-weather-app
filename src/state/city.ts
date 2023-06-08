@@ -1,8 +1,8 @@
 import { atom, selector } from "recoil";
 
-export const cityState = atom<GeoLocation>({
+export const cityState = atom<GeoLocation | null>({
   key: "cityState",
-  default: { lat: 0, lon: 0, name: "", country: "", state: "" },
+  default: null,
 });
 
 export const citiesState = atom<GeoLocation[]>({
@@ -10,11 +10,11 @@ export const citiesState = atom<GeoLocation[]>({
   default: [],
 });
 
-export const cityQuery = selector<GeoLocation>({
+export const cityQuery = selector<GeoLocation | null>({
   key: "cityQuery",
   get: ({ get }) => {
     const city = get(cityState);
-    if (!city) return { lat: 0, lon: 0, name: "", country: "", state: "" };
+    if (!city) return null;
     return city;
   },
 });

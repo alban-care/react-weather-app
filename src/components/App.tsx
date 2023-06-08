@@ -4,17 +4,28 @@ import NavBar from "./NavBar";
 import NowSection from "./NowSection";
 import StickyFooter from "./StickyFooter";
 import TodaySection from "./TodaySection";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { weatherState } from "../state/weather";
 import { cityState } from "../state/city";
+import { useEffect } from "react";
+import { getWeatherByCoordinate } from "../api";
 
 type AppProps = {
   // props
 };
 
 const App: React.FC<AppProps> = () => {
-  const weather = useRecoilValue(weatherState);
+  const [weather, setWeather] = useRecoilState(weatherState);
   const getCityState = useRecoilValue(cityState);
+
+  useEffect(() => {
+    if (getCityState) {
+      const { lat, lon } = getCityState;
+      getWeatherByCoordinate(lat, lon).then((data) => {
+        setWeather(data);
+      });
+    }
+  }, [getCityState, setWeather]);
 
   return (
     <Box
@@ -50,7 +61,6 @@ const App: React.FC<AppProps> = () => {
                 <Typography variant="subtitle1" align="center">
                   Search for a city to get started or allow location access
                 </Typography>
-                <pre>{JSON.stringify(getCityState, null, 2)}</pre>
               </Box>
             )}
           </Grid>

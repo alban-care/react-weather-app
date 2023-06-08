@@ -1,10 +1,6 @@
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import React from "react";
-import sun from "../assets/images/01d.png";
-import cloud from "../assets/images/03d.png";
-import rain from "../assets/images/09d.png";
-import thunderstorm from "../assets/images/11d.png";
-import snow from "../assets/images/13d.png";
+import WeatherIcon from "./WeatherIcon";
 
 type ForecastSectionProps = {
   // todo
@@ -16,35 +12,35 @@ const ForecastSection: React.FC<ForecastSectionProps> = () => {
       day: "Thursday",
       date: "2",
       month: "June",
-      icon: sun,
+      icon: "01d",
       temp: "20°C",
     },
     {
       day: "Friday",
       date: "3",
       month: "June",
-      icon: cloud,
+      icon: "03d",
       temp: "24°C",
     },
     {
       day: "Saturday",
       date: "4",
       month: "June",
-      icon: rain,
+      icon: "09d",
       temp: "18°C",
     },
     {
       day: "Sunday",
       date: "5",
       month: "June",
-      icon: snow,
+      icon: "13d",
       temp: "12°C",
     },
     {
       day: "Monday",
       date: "6",
       month: "June",
-      icon: thunderstorm,
+      icon: "11d",
       temp: "16°C",
     },
   ];
@@ -75,12 +71,7 @@ const ForecastSection: React.FC<ForecastSectionProps> = () => {
                       {`${item.date} ${item.month}`}
                     </Typography>
                   </Box>
-                  <img
-                    src={item.icon}
-                    alt="weather icon"
-                    width={48}
-                    height={48}
-                  />
+                  <WeatherIcon icon={item.icon} />
                   <Typography variant="h6" mt={1} ml={{ xs: 4, sm: 0 }}>
                     {item.temp}
                   </Typography>
