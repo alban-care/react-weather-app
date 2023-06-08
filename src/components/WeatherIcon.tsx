@@ -12,7 +12,7 @@ const WeatherIcon: React.FC<WeatherIconProps> = ({
   width = 54,
   height,
 }) => {
-  const url = `../public/assets/images/${icon}.png`;
+  const url = `/react-weather-app/assets/images/${icon}.png`;
 
   if (height === undefined) height = width;
 
@@ -28,7 +28,7 @@ const WeatherIcon: React.FC<WeatherIconProps> = ({
       width={width}
       height={height}
       sx={{
-        background: `no-repeat url(../public/assets/images/${icon}.png) center center / contain`,
+        background: `no-repeat url(${url}) center center / contain`,
       }}
     />
   );

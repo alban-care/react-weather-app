@@ -108,7 +108,6 @@ const SearchBar: React.FC<SearchBarProps> = () => {
     <AppBar
       position="sticky"
       sx={{
-        display: { xs: "none", md: "flex" },
         backgroundColor:
           palette.mode === "dark" ? palette.grey[900] : palette.common.white,
       }}
