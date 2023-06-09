@@ -1,26 +1,31 @@
 import {
   AppBar,
-  InputBase,
-  IconButton,
-  alpha,
-  styled,
   Box,
   Container,
-  Toolbar,
-  useTheme,
+  Divider,
+  IconButton,
+  InputBase,
   Menu,
   MenuItem,
+  Toolbar,
   Typography,
+  alpha,
+  styled,
+  useTheme,
 } from "@mui/material";
-import SearchIcon from "../Icons/SearchIcon";
-import GeoIcon from "../Icons/GeoIcon";
-import { useEffect, useState, useRef } from "react";
-import useDebounce from "../../hook/UseDebounce";
+import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { cityState, citiesState } from "../../state/city";
+import {
+  getGeoLocationByCityName,
+  getGeoLocationByCoordinate,
+} from "../../api";
+import useDebounce from "../../hook/UseDebounce";
+import { citiesState, cityState } from "../../state/city";
+import { historyState } from "../../state/history";
 import { searchState } from "../../state/search";
-import { getGeoLocationByCityName } from "../../api";
-import { getGeoLocationByCoordinate } from "../../api";
+import GeoIcon from "../Icons/GeoIcon";
+import SearchIcon from "../Icons/SearchIcon";
+import HistoryIcon from "../Icons/HistoryIcon";
 
 type SearchBarProps = {
   // props
@@ -71,6 +76,7 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useRecoilState<string>(searchState);
   const [cities, setCities] = useRecoilState<GeoLocation[]>(citiesState);
+  const [history, setHistory] = useRecoilState<GeoLocation[]>(historyState);
   const setCityState = useSetRecoilState<GeoLocation | null>(cityState);
 
   const debouncedValue = useDebounce<string>(search, 500);
@@ -82,6 +88,8 @@ const SearchBar: React.FC<SearchBarProps> = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
+
     if (!search) return [];
     // fetch data from api
     const cities = await getGeoLocationByCityName(search);
@@ -92,16 +100,38 @@ const SearchBar: React.FC<SearchBarProps> = () => {
   };
 
   const handleClickOnMenuItem = (e: React.MouseEvent<HTMLElement>) => {
-    const id = Number(e.currentTarget.id);
-    // update city state when user select a city in the menu
-    setCityState(cities[id]);
+    const id = e.currentTarget.id;
+    if (!id) return;
+    const city =
+      cities[Number(id.replace("city-", ""))] ||
+      history[Number(id.replace("history-", ""))];
+    if (!city) return;
+    // update city state
+    setCityState(city);
+    // update history state (remove duplicate and keep only 5 items)
+    setHistory((item) => {
+      return [city, ...item.filter((item) => item.name !== city.name)].slice(
+        0,
+        5
+      );
+    });
     // close the menu
     setAnchorEl(null);
     // reset search state
     setSearch("");
   };
 
+  const handleClickOnHistoryIcon = () => {
+    setError(null);
+
+    if (!history.length) setError("Aucune recherche récente.");
+    // open the menu
+    setAnchorEl(inputRef.current);
+  };
+
   const handleClickOnGeoIcon = async () => {
+    setError(null);
+
     type Position = {
       coords: {
         latitude: number;
@@ -126,8 +156,6 @@ const SearchBar: React.FC<SearchBarProps> = () => {
       );
       // update cities state
       setCities(cities);
-      // update city state
-      // setCityState(cities[0]);
       // open the menu
     } catch (error) {
       if (error instanceof GeolocationPositionError) {
@@ -170,6 +198,14 @@ const SearchBar: React.FC<SearchBarProps> = () => {
             justifyContent="center"
             onSubmit={handleSubmit}
           >
+            <IconButton
+              size="large"
+              edge="start"
+              sx={{ mr: 2 }}
+              onClick={handleClickOnHistoryIcon}
+            >
+              <HistoryIcon />
+            </IconButton>
             <Search ref={inputRef}>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -224,32 +260,71 @@ const SearchBar: React.FC<SearchBarProps> = () => {
               },
             }}
           >
-            {error && (
+            {error ? (
               <Box sx={{ p: 2, pb: 0.5 }}>
                 <Typography color="text.secondary">{error}</Typography>
               </Box>
-            )}
-
-            {cities && (
-              <Box sx={{ p: 2, pb: 0.5 }}>
-                {cities.map((result, index) => (
-                  <MenuItem
-                    id={`${index}`}
-                    key={index}
-                    onClick={handleClickOnMenuItem}
-                    sx={{ typography: "body2" }}
-                  >
-                    <GeoIcon />
-                    <Box ml={2}>
-                      <Typography variant="subtitle1" color="text.primary">
-                        {result.name}
-                      </Typography>
-                      <Typography variant="inherit" color="text.secondary">
-                        {`${result.state}, ${result.country}`}
-                      </Typography>
+            ) : (
+              <Box>
+                {cities && (
+                  <Box>
+                    <Box sx={{ p: 2, pb: 0.5 }}>
+                      {cities.map((result, index) => (
+                        <MenuItem
+                          id={`city-${index}`}
+                          key={index}
+                          onClick={handleClickOnMenuItem}
+                          sx={{ typography: "body2" }}
+                        >
+                          <GeoIcon />
+                          <Box ml={2}>
+                            <Typography
+                              variant="subtitle1"
+                              color="text.primary"
+                            >
+                              {result.name}
+                            </Typography>
+                            <Typography
+                              variant="inherit"
+                              color="text.secondary"
+                            >
+                              {`${result.state}, ${result.country}`}
+                            </Typography>
+                          </Box>
+                        </MenuItem>
+                      ))}
                     </Box>
-                  </MenuItem>
-                ))}
+                    <Divider sx={{ my: 1 }} />
+                    {history.length > 0 && (
+                      <Box sx={{ p: 2, pb: 0.5 }}>
+                        {history.map((result, index) => (
+                          <MenuItem
+                            id={`history-${index}`}
+                            key={index}
+                            onClick={handleClickOnMenuItem}
+                            sx={{ typography: "body2" }}
+                          >
+                            <GeoIcon />
+                            <Box ml={2}>
+                              <Typography
+                                variant="subtitle1"
+                                color="text.primary"
+                              >
+                                {result.name}
+                              </Typography>
+                              <Typography
+                                variant="inherit"
+                                color="text.secondary"
+                              >
+                                {`${result.state}, ${result.country}`}
+                              </Typography>
+                            </Box>
+                          </MenuItem>
+                        ))}
+                      </Box>
+                    )}
+                  </Box>
+                )}
               </Box>
             )}
           </Menu>
